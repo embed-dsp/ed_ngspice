@@ -1,0 +1,7 @@
+
+# Copyright (c) 2022-2023 embed-dsp, All Rights Reserved.
+# Author: Gudmundur Bogason <gb@embed-dsp.com>
+
+# Directories
+build/
+obsolete/
