@@ -4,9 +4,7 @@
 
 
 PACKAGE_NAME = ngspice
-
 PACKAGE_VERSION = 38
-
 PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
 # ==============================================================================
@@ -39,14 +37,28 @@ ifeq ($(J),)
 	J = 8
 endif
 
+#   sudo dnf install libXaw-devel
+# --enable-openmp
+# --enable-adms
+# --enable-oldapps
+# --enable-relpath
+
+CONFIGURE_FLAGS = --disable-debug --enable-xspice
+
 # Configuration for linux system.
 ifeq ($(SYSTEM),linux)
 	# Compiler.
 	CC = /usr/bin/gcc
 	CXX = /usr/bin/g++
+
+	ifeq ($(LIB),)
+		CONFIGURE_FLAGS += --with-readline=yes --with-x
+	else
+		CONFIGURE_FLAGS += --with-ngshared
+	endif
+
 	# Installation directory.
 	INSTALL_DIR = /opt
-	CONFIGURE_FLAGS = --with-readline=yes --with-x
 endif
 
 # Configuration for mingw64 system.
@@ -60,14 +72,14 @@ endif
 # endif
 
 # Installation directory.
-PREFIX = $(INSTALL_DIR)/$(PACKAGE_NAME)/$(PACKAGE)
+# PREFIX = $(INSTALL_DIR)/$(PACKAGE_NAME)/$(PACKAGE)
+PREFIX = $(INSTALL_DIR)/$(PACKAGE_NAME)/$(ARCH)/$(PACKAGE)
 
 ifeq ($(LIB),)
 else
 PREFIX := $(PREFIX)-lib
 endif
 
-EXEC_PREFIX = $(PREFIX)
 # EXEC_PREFIX = $(PREFIX)/$(ARCH)
 
 # ==============================================================================
@@ -75,7 +87,7 @@ EXEC_PREFIX = $(PREFIX)
 all:
 	@echo "ARCH        = $(ARCH)"
 	@echo "PREFIX      = $(PREFIX)"
-	@echo "EXEC_PREFIX = $(EXEC_PREFIX)"
+#	@echo "EXEC_PREFIX = $(EXEC_PREFIX)"
 	@echo ""
 	@echo "## Get Source Code"
 	@echo "make download"
@@ -108,20 +120,9 @@ prepare:
 
 .PHONY: configure
 configure:
-ifeq ($(LIB),)
-	cd build/$(PACKAGE) && ./configure CC=$(CC) --prefix=$(PREFIX) --exec_prefix=$(EXEC_PREFIX) --disable-debug --enable-relpath --enable-xspice $(CONFIGURE_FLAGS)
-else
-	cd build/$(PACKAGE) && ./configure CC=$(CC) --prefix=$(PREFIX) --exec_prefix=$(EXEC_PREFIX) --disable-debug --enable-relpath --enable-xspice --with-ngshared
-endif
+	cd build/$(PACKAGE) && ./configure CC=$(CC) --prefix=$(PREFIX) $(CONFIGURE_FLAGS)
+#	cd build/$(PACKAGE) && ./configure CC=$(CC) --prefix=$(PREFIX) --exec_prefix=$(EXEC_PREFIX) $(CONFIGURE_FLAGS)
 
-# --with-x
-#   sudo dnf install libXaw-devel
-
-# --enable-relpath
-# --enable-openmp
-
-# --enable-adms
-# --enable-oldapps
 
 .PHONY: compile
 compile:
