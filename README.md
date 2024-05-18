@@ -2,7 +2,6 @@
 # Compile and Install of the Ngspice circuit simulator
 
 This repository contains a **make** file for easy compile and install of [Ngspice](https://ngspice.sourceforge.io).
-
 Ngspice is the open source spice simulator for electric and electronic circuits.
 
 This **make** file can build the Ngspice tool on the following systems:
@@ -25,7 +24,7 @@ cd ed_ngspice
 
 # Edit the Makefile for selecting the Ngspice source version.
 vim Makefile
-PACKAGE_VERSION = 38
+PACKAGE_VERSION = 42
 ```
 
 ```bash
@@ -41,11 +40,15 @@ make download
 make prepare
 ```
 
-```bash
-# Configure source code.
-make configure
+**NOTE**: Select one of the following configuration options depending on if you want to build Ngspice as an application or as a library.
 
-# Configure source code for a shared library instead of an application.
+```bash
+# Configure source code for an application.
+make configure
+```
+
+```bash
+# Configure source code for a shared library.
 make configure LIB=1
 ```
 
