@@ -4,7 +4,7 @@
 
 
 PACKAGE_NAME = ngspice
-PACKAGE_VERSION = 38
+PACKAGE_VERSION = 42
 PACKAGE = $(PACKAGE_NAME)-$(PACKAGE_VERSION)
 
 # ==============================================================================
@@ -19,9 +19,6 @@ ifeq ($(findstring MINGW32, $(shell uname -s)), MINGW32)
 endif
 ifeq ($(findstring MINGW64, $(shell uname -s)), MINGW64)
 	SYSTEM = mingw64
-endif
-ifeq ($(findstring CYGWIN, $(shell uname -s)), CYGWIN)
-	SYSTEM = cygwin
 endif
 
 # Determine machine.
@@ -61,7 +58,7 @@ ifeq ($(SYSTEM),linux)
 	INSTALL_DIR = /opt
 endif
 
-# Configuration for mingw64 system.
+# FIXME: Configuration for mingw64 system.
 # ifeq ($(SYSTEM),mingw64)
 # 	# Compiler.
 # 	CC = /mingw64/bin/gcc
